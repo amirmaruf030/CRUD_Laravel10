@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -55,5 +56,50 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
 
         return view('posts.show', compact('post'));
+    }
+
+    public function edit(string $id): View
+    {
+        $post = Post::findOrFail($id);
+
+        return view('posts.edit', compact('post'));
+    }
+
+    public function update(Request $request, $id): RedirectResponse
+    {
+        //validate form
+        $this->validate($request, [
+            'image' => 'image|mimes:jpeg,jpg,png|max:2048',
+            'title' => 'required|min:5',
+            'content' => 'required|min:10'
+        ]);
+
+        //get post by ID
+        $post = Post::FindOrFail($id);
+
+        //check if image is uploaded
+        if ($request->hasFile('image')) {
+
+            // upload new image
+            $image = $request->file('image');
+            $image->storeAs('public/posts', $image->hashName());
+
+            // Delete Old Image
+            Storage::delete('public/posts/' . $post->image);
+
+            // update post with new image
+            $post->update([
+                'image' => $image->hashName(),
+                'title' => $request->title,
+                'content' => $request->content
+            ]);
+        } else {
+            $post->update([
+                'title' => $request->title,
+                'content' => $request->content
+            ]);
+        }
+
+        return redirect()->route('posts.index')->with(['success' => 'Data Berhasil Diubah!']);
     }
 }
