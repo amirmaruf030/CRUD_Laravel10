@@ -102,4 +102,19 @@ class PostController extends Controller
 
         return redirect()->route('posts.index')->with(['success' => 'Data Berhasil Diubah!']);
     }
+
+    public function destroy($id): RedirectResponse
+    {
+        // //get post by ID
+        $post = Post::FindOrFail($id);
+
+        //delete image
+        Storage::delete('public/posts/' . $post->image);
+
+        //delete post
+        $post->delete();
+
+        //redirect to index
+        return redirect()->route('posts.index')->with(['success' => 'Data Berhasil Dihapus!']);
+    }
 }
