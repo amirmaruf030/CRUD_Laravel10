@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/clom33216/laravel/
+    - export DEPLOYPATH=/home/clom3316/laravel/
     - /bin/cp -R app $DEPLOYPATH
     - /bin/cp -R bootstrap $DEPLOYPATH
     - /bin/cp -R config $DEPLOYPATH
@@ -21,5 +21,5 @@ deployment:
     - /bin/cp phpunit.xml $DEPLOYPATH
     - /bin/cp README.md $DEPLOYPATH
     - /bin/cp vite.config.js $DEPLOYPATH
-    - export DEPLOYPATH=/home/clom33216/public_html/.app/clov/
+    - export DEPLOYPATH=/home/clom3316/public_html/.app/clov/
     - /bin/cp -R public $DEPLOYPATH
